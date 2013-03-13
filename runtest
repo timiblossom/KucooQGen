@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+FWDIR="$(cd `dirname $0`; pwd)"
+
+
+RUNNER="java"
+
+JAVA_OPTS+="-Xms2056m -Xmx3092m -XX:MaxPermSize=256m"
+# Load extra JAVA_OPTS from conf/java-opts, if it exists
+export JAVA_OPTS
+
+
+# Build up classpath
+CLASSPATH+=":$FWDIR/conf"
+CLASSPATH+=":$FWDIR/classes"
+for jar in `find $FWDIR/lib -name '*jar'`; do
+  CLASSPATH+=":$jar"
+done
+
+exec "$RUNNER" -cp "$CLASSPATH" $JAVA_OPTS "$@"
